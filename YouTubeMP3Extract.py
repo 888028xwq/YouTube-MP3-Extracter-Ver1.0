@@ -86,8 +86,8 @@ class mediaExtract:
             return
 
         if 'list=' in url:
-            messagebox.showerror("輸入錯誤", "該URL為播放清單，請選擇獨立影片的URL")
-            return
+            import re
+            url = re.sub(r'&list=[^&]*', '', url)
 
         download_path = filedialog.askdirectory(title="選擇下載位置")
         if not download_path:
@@ -127,6 +127,8 @@ class mediaExtract:
                 # 重新啟用輸入框和按鈕
                 self.url_entry.config(state='normal')
                 self.download_button.config(state='normal')
+
+                self.url_entry.delete(0, tk.END)  # 清空 URL 輸入框
 
         # 啟動下載的線程
         threading.Thread(target=download_thread).start()
